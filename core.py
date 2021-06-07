@@ -4,7 +4,7 @@ from tempfile import gettempdir
 from dotenv import load_dotenv
 from telegram import Update
 from telegram.constants import MESSAGEENTITY_URL, MESSAGEENTITY_TEXT_LINK
-from telegram.ext import Updater, MessageHandler, CallbackContext, Filters
+from telegram.ext import Updater, MessageHandler, CallbackContext, Filters, CommandHandler
 import os
 
 load_dotenv()
@@ -28,10 +28,15 @@ def getVideo(update: Update, context: CallbackContext) -> None:
 		update.message.reply_text('Я тебе не зрозумів')
 
 
+def getInfo(update: Update, context: CallbackContext) -> None:
+	update.message.reply_text('Кинь мені посилання на видиво з ютуба і я скачаю тобі його')
+
+
 bot.dispatcher.add_handler(MessageHandler(
 	(Filters.text & (Filters.entity(MESSAGEENTITY_URL) | Filters.entity(MESSAGEENTITY_TEXT_LINK))),
 	getVideo
 	))
+bot.dispatcher.add_handler(CommandHandler(['start', 'help'], getInfo))
 
 
 print('Starting...')
